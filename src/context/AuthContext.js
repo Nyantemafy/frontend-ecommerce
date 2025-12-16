@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import api from '../api/axios';
 
 const AuthContext = createContext();
 
@@ -17,10 +17,12 @@ export const useAuth = () => {
     const [loading, setLoading] = useState(true);
     const [token, setToken] = useState(localStorage.getItem('token'));
 
-    // Configuration axios avec token
     useEffect(() => {
         if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        api.defaults.headers.common['Authorization'] = token
+            ? `Bearer ${token}`
+            : '';
+
         loadUser();
         } else {
         setLoading(false);
@@ -30,7 +32,7 @@ export const useAuth = () => {
     // Charger les infos utilisateur
     const loadUser = async () => {
         try {
-        const { data } = await axios.get('/api/auth/me');
+        const { data } = await api.get('/api/auth/me');
         setUser(data);
         } catch (error) {
         console.error('Load user error:', error);
@@ -43,7 +45,7 @@ export const useAuth = () => {
     // Register
     const register = async (name, email, password) => {
         try {
-        const { data } = await axios.post('/api/auth/register', {
+        const { data } = await api.post('/api/auth/register', {
             name,
             email,
             password
@@ -64,7 +66,7 @@ export const useAuth = () => {
     // Login
     const login = async (email, password) => {
         try {
-        const { data } = await axios.post('/api/auth/login', {
+        const { data } = await api.post('/api/auth/login', {
             email,
             password
         });
@@ -86,14 +88,14 @@ export const useAuth = () => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
-        delete axios.defaults.headers.common['Authorization'];
+        delete api.defaults.headers.common['Authorization'];
         toast.success('Logged out successfully');
     };
 
     // Update profile
     const updateProfile = async (userData) => {
         try {
-        const { data } = await axios.put('/api/auth/profile', userData);
+        const { data } = await api.put('/api/auth/profile', userData);
         setUser(data);
         toast.success('Profile updated successfully!');
         return { success: true };

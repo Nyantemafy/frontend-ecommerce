@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Clock, Star } from 'lucide-react';
-import axios from 'axios';
+import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
 
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
 
     const fetchFeaturedProducts = async () => {
         try {
-        const { data } = await axios.get('/api/products/featured');
+        const { data } = await api.get('/api/products/featured');
         setFeaturedProducts(data);
         } catch (error) {
         console.error('Error fetching featured products:', error);

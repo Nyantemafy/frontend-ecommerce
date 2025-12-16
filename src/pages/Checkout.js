@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, Package } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import axios from 'axios';
+import api from '../api/axios';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -68,10 +68,10 @@ const CheckoutForm = () => {
             totalPrice
         };
 
-        const { data: order } = await axios.post('/api/orders', orderData);
+        const { data: order } = await api.post('/api/orders', orderData);
 
         // Créer le Payment Intent
-        const { data: paymentIntent } = await axios.post('/api/payment/create-payment-intent', {
+        const { data: paymentIntent } = await api.post('/api/payment/create-payment-intent', {
             amount: totalPrice
         });
 
@@ -103,7 +103,7 @@ const CheckoutForm = () => {
 
         if (confirmedPayment.status === 'succeeded') {
             // Mettre à jour l'ordre comme payé
-            await axios.put(`/api/orders/${order._id}/pay`, {
+            await api.put(`/api/orders/${order._id}/pay`, {
             id: confirmedPayment.id,
             status: confirmedPayment.status,
             update_time: new Date().toISOString(),
