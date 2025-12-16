@@ -1,0 +1,7 @@
+cd frontend
+
+# Installer les dépendances
+npm install
+
+# Démarrer l'application
+npm start
