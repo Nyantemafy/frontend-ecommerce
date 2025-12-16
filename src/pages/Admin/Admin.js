@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 import { RevenueChart, SalesByCategoryChart } from '../../components/Charts';
 
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 // Dashboard Component
 const Dashboard = () => {
