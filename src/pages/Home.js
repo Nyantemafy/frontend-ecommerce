@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Clock, Star } from 'lucide-react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
+import { Laptop, Shirt, Book, Home as HomeIcon, Dumbbell, Gift } from 'lucide-react';
 
 const Home = () => {
     const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -115,29 +116,33 @@ const Home = () => {
         {/* Categories Section */}
         <section className="py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
-                Shop by Category
-            </h2>
+                <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
+                    Shop by Category
+                </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {['Electronics', 'Clothing', 'Books', 'Home', 'Sports', 'Other'].map((category) => (
-                <Link
-                    key={category}
-                    to={`/products?category=${category}`}
-                    className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition text-center"
-                >
-                    <div className="text-4xl mb-2">
-                    {category === 'Electronics' && '💻'}
-                    {category === 'Clothing' && '👕'}
-                    {category === 'Books' && '📚'}
-                    {category === 'Home' && '🏠'}
-                    {category === 'Sports' && '⚽'}
-                    {category === 'Other' && '🎁'}
-                    </div>
-                    <h3 className="font-semibold text-gray-800">{category}</h3>
-                </Link>
-                ))}
-            </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {[
+                        { name: 'Electronics', icon: <Laptop className="w-8 h-8" /> },
+                        { name: 'Clothing', icon: <Shirt className="w-8 h-8" /> },
+                        { name: 'Books', icon: <Book className="w-8 h-8" /> },
+                        { name: 'Home', icon: <HomeIcon className="w-8 h-8" /> },
+                        { name: 'Sports', icon: <Dumbbell className="w-8 h-8" /> },
+                        { name: 'Other', icon: <Gift className="w-8 h-8" /> }
+                    ].map((category) => (
+                        <Link
+                        key={category.name}
+                        to={`/products?category=${category.name}`}
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition text-center group"
+                        >
+                        <div className="flex justify-center mb-3">
+                            <div className="p-3 bg-primary-50 rounded-full group-hover:bg-primary-100 transition">
+                            {category.icon}
+                            </div>
+                        </div>
+                        <h3 className="font-semibold text-gray-800">{category.name}</h3>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </section>
 
