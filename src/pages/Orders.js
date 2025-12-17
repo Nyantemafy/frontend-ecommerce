@@ -16,7 +16,24 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get(`${API_URL}/api/orders/myorders`);
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+      if (!userInfo || !userInfo.token) {
+        toast.error('User not logged in');
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `${API_URL}/api/orders/myorders`,
+        config
+      );
+
       setOrders(data);
     } catch (error) {
       toast.error('Failed to load orders');

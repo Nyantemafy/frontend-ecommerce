@@ -46,10 +46,15 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
       const [ordersRes, productsRes, usersRes] = await Promise.all([
-        axios.get(`${API_URL}/api/orders`),
-        axios.get(`${API_URL}/api/products`),
-        axios.get(`${API_URL}/api/users`),
+        axios.get(`${API_URL}/api/orders`, config),
+        axios.get(`${API_URL}/api/products`, config),
+        axios.get(`${API_URL}/api/users`, config),
       ]);
 
       console.log('Orders:', ordersRes.data);
@@ -407,24 +412,40 @@ const ProductsManagement = () => {
   };
 
   const handleDelete = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Please log in to perform this action');
+      return;
+    }
+
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`${API_URL}/api/products/${id}`);
+        await axios.delete(`${API_URL}/api/products/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         toast.success('Product deleted successfully');
         fetchProducts();
       } catch (error) {
-        toast.error('Failed to delete product');
+        toast.error(error.response?.data?.message || 'Failed to delete product');
       }
     }
   };
 
   const handleToggleFeatured = async (id, currentStatus) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Please log in to perform this action');
+      return;
+    }
+
     try {
-      await axios.put(`${API_URL}/api/products/${id}`, { featured: !currentStatus });
+      await axios.put(`${API_URL}/api/products/${id}`, { featured: !currentStatus }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('Product updated successfully');
       fetchProducts();
     } catch (error) {
-      toast.error('Failed to update product');
+      toast.error(error.response?.data?.message || 'Failed to update product');
     }
   };
 
@@ -722,14 +743,18 @@ const OrdersManagement = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const fetchOrders = async () => {
+    if (!token) return toast.error('Please log in');
     try {
-      const { data } = await axios.get(`${API_URL}/api/orders`);
+      const { data } = await axios.get(`${API_URL}/api/orders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setOrders(data);
     } catch (error) {
       toast.error('Failed to load orders');
@@ -739,8 +764,11 @@ const OrdersManagement = () => {
   };
 
   const handleStatusChange = async (orderId, newStatus) => {
+    if (!token) return toast.error('Please log in');
     try {
-      await axios.put(`${API_URL}/api/orders/${orderId}/status`, { status: newStatus });
+      await axios.put(`${API_URL}/api/orders/${orderId}/status`, { status: newStatus }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('Order status updated');
       fetchOrders();
     } catch (error) {
@@ -869,14 +897,18 @@ const OrdersManagement = () => {
 const UsersManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
+    if (!token) return toast.error('Please log in');
     try {
-      const { data } = await axios.get(`${API_URL}/api/users`);
+      const { data } = await axios.get(`${API_URL}/api/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setUsers(data);
     } catch (error) {
       toast.error('Failed to load users');
@@ -886,9 +918,12 @@ const UsersManagement = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!token) return toast.error('Please log in');
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await axios.delete(`${API_URL}/api/users/${id}`);
+        await axios.delete(`${API_URL}/api/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         toast.success('User deleted successfully');
         fetchUsers();
       } catch (error) {
@@ -898,8 +933,11 @@ const UsersManagement = () => {
   };
 
   const handleRoleChange = async (id, newRole) => {
+    if (!token) return toast.error('Please log in');
     try {
-      await axios.put(`${API_URL}/api/users/${id}`, { role: newRole });
+      await axios.put(`${API_URL}/api/users/${id}`, { role: newRole }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('User role updated');
       fetchUsers();
     } catch (error) {
