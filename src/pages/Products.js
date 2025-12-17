@@ -5,6 +5,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 
 const Products = () => {
+    const API_URL = process.env.REACT_APP_API_URL;
     const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -48,7 +49,7 @@ const Products = () => {
             rating: filters.rating
         };
 
-        const { data } = await axios.get('/api/products', { params });
+        const { data } = await axios.get(`${API_URL}/api/products`, { params });
         setProducts(data.products);
         setPagination({
             page: data.page,
