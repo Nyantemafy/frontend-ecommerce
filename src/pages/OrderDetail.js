@@ -9,6 +9,7 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchOrder();
@@ -16,7 +17,7 @@ const OrderDetail = () => {
 
   const fetchOrder = async () => {
     try {
-      const { data } = await axios.get(`/api/orders/${id}`);
+      const { data } = await axios.get(`${API_URL}/api/orders/${id}`);
       setOrder(data);
     } catch (error) {
       toast.error('Failed to load order details');

@@ -17,6 +17,7 @@ const ProductDetail = () => {
     const [selectedImage, setSelectedImage] = useState(0);
     const [review, setReview] = useState({ rating: 5, comment: '' });
     const [submittingReview, setSubmittingReview] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         fetchProduct();
@@ -24,7 +25,7 @@ const ProductDetail = () => {
 
     const fetchProduct = async () => {
         try {
-        const { data } = await axios.get(`/api/products/${id}`);
+        const { data } = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(data);
         } catch (error) {
         toast.error('Product not found');
@@ -53,7 +54,7 @@ const ProductDetail = () => {
 
         setSubmittingReview(true);
         try {
-        await axios.post(`/api/products/${id}/reviews`, review);
+        await axios.post(`${API_URL}/api/products/${id}/reviews`, review);
         toast.success('Review submitted successfully');
         setReview({ rating: 5, comment: '' });
         fetchProduct();

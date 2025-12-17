@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Truck, Shield, Clock, Star } from 'lucide-react';
-import api from '../api/axios';
+import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 
 const Home = () => {
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         fetchFeaturedProducts();
@@ -14,7 +15,7 @@ const Home = () => {
 
     const fetchFeaturedProducts = async () => {
         try {
-        const { data } = await api.get('/api/products/featured');
+        const { data } = await axios.get(`${API_URL}/api/products/featured`);
         setFeaturedProducts(data);
         } catch (error) {
         console.error('Error fetching featured products:', error);

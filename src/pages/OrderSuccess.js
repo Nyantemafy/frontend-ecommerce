@@ -7,6 +7,7 @@ const OrderSuccess = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchOrder();
@@ -14,7 +15,7 @@ const OrderSuccess = () => {
 
   const fetchOrder = async () => {
     try {
-      const { data } = await axios.get(`/api/orders/${orderId}`);
+      const { data } = await axios.get(`${API_URL}/api/orders/${orderId}`);
       setOrder(data);
     } catch (error) {
       console.error('Error fetching order:', error);

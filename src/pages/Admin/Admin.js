@@ -409,7 +409,7 @@ const ProductsManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/api/products/${id}`);
+        await axios.delete(`${API_URL}/api/products/${id}`);
         toast.success('Product deleted successfully');
         fetchProducts();
       } catch (error) {
@@ -420,7 +420,7 @@ const ProductsManagement = () => {
 
   const handleToggleFeatured = async (id, currentStatus) => {
     try {
-      await axios.put(`/api/products/${id}`, { featured: !currentStatus });
+      await axios.put(`${API_URL}/api/products/${id}`, { featured: !currentStatus });
       toast.success('Product updated successfully');
       fetchProducts();
     } catch (error) {
@@ -729,7 +729,7 @@ const OrdersManagement = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('/api/orders');
+      const { data } = await axios.get(`${API_URL}/api/orders`);
       setOrders(data);
     } catch (error) {
       toast.error('Failed to load orders');
@@ -740,7 +740,7 @@ const OrdersManagement = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.put(`/api/orders/${orderId}/status`, { status: newStatus });
+      await axios.put(`${API_URL}/api/orders/${orderId}/status`, { status: newStatus });
       toast.success('Order status updated');
       fetchOrders();
     } catch (error) {
@@ -876,7 +876,7 @@ const UsersManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get('/api/users');
+      const { data } = await axios.get(`${API_URL}/api/users`);
       setUsers(data);
     } catch (error) {
       toast.error('Failed to load users');
@@ -888,7 +888,7 @@ const UsersManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await axios.delete(`/api/users/${id}`);
+        await axios.delete(`${API_URL}/api/users/${id}`);
         toast.success('User deleted successfully');
         fetchUsers();
       } catch (error) {
@@ -899,7 +899,7 @@ const UsersManagement = () => {
 
   const handleRoleChange = async (id, newRole) => {
     try {
-      await axios.put(`/api/users/${id}`, { role: newRole });
+      await axios.put(`${API_URL}/api/users/${id}`, { role: newRole });
       toast.success('User role updated');
       fetchUsers();
     } catch (error) {

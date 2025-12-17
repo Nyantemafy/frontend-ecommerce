@@ -8,6 +8,7 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchOrders();
@@ -15,7 +16,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('/api/orders/myorders');
+      const { data } = await axios.get(`${API_URL}/api/orders/myorders`);
       setOrders(data);
     } catch (error) {
       toast.error('Failed to load orders');

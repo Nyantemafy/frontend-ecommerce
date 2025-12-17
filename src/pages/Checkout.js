@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { CreditCard, MapPin, Package } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import api from '../api/axios';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 // Remplacez par votre clé publique Stripe
 const stripePromise = loadStripe('pk_test_51SekjHJfvPUob9nUUgs9ICBSfd8i48bm4zG2l0RgrBqYleCFBi4yIE9PsUjoFdb6yEIxMMP0OfXpxObZoXeF2yuY00M3rjYmgp');
 
 const CheckoutForm = () => {
+    const API_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
@@ -68,10 +69,10 @@ const CheckoutForm = () => {
             totalPrice
         };
 
-        const { data: order } = await api.post('/api/orders', orderData);
+        const { data: order } = await axios.post(`${API_URL}/api/orders`, orderData);
 
         // Créer le Payment Intent
-        const { data: paymentIntent } = await api.post('/api/payment/create-payment-intent', {
+        const { data: paymentIntent } = await axios.post(`${API_URL}/api/payment/create-payment-intent`, {
             amount: totalPrice
         });
 
@@ -103,7 +104,7 @@ const CheckoutForm = () => {
 
         if (confirmedPayment.status === 'succeeded') {
             // Mettre à jour l'ordre comme payé
-            await api.put(`/api/orders/${order._id}/pay`, {
+            await axios.put(`${API_URL}/api/orders/${order._id}/pay`, {
             id: confirmedPayment.id,
             status: confirmedPayment.status,
             update_time: new Date().toISOString(),
